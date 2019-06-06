@@ -1,0 +1,15 @@
+sudo: required
+
+services:
+  - docker
+
+#specify the series of commands before our tests will run
+before_install:
+  - docker build -f Dockerfile.dev -t test_image .
+
+#specify the series of commands to be executed
+#Travic CI is going to be watching the output of each of these commands
+#and from each command if it ever gets a return status code other than zero
+#Travic is going to assume that our build failed or that our tests failed to run
+script:
+  - docker run test_image npm run test -- --coverage
